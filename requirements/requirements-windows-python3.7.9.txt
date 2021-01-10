@@ -1,0 +1,4 @@
+libs
+pyqt5==5.10.1
+lxml==4.6.2
+# pyrcc5 -o libs/resources.py resources.qrc

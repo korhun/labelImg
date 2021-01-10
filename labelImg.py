@@ -466,7 +466,6 @@ class MainWindow(QMainWindow, WindowMixin):
             self.statusBar().showMessage('%s started. Annotation will be saved to %s' %
                                          (__appname__, self.defaultSaveDir))
             self.statusBar().show()
-
         self.restoreState(settings.get(SETTING_WIN_STATE, QByteArray()))
         Shape.line_color = self.lineColor = QColor(settings.get(SETTING_LINE_COLOR, DEFAULT_LINE_COLOR))
         Shape.fill_color = self.fillColor = QColor(settings.get(SETTING_FILL_COLOR, DEFAULT_FILL_COLOR))
@@ -504,6 +503,9 @@ class MainWindow(QMainWindow, WindowMixin):
         # Open Dir if deafult file
         if self.filePath and os.path.isdir(self.filePath):
             self.openDirDialog(dirpath=self.filePath, silent=True)
+
+        # if os.path.isdir(self.lastOpenDir):
+        #     self.importDirImages(self.lastOpenDir)
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
@@ -1560,6 +1562,10 @@ class MainWindow(QMainWindow, WindowMixin):
     def toogleDrawSquare(self):
         self.canvas.setDrawingShapeToSquare(self.drawSquaresOption.isChecked())
 
+    def shown(self):
+        if os.path.isdir(self.lastOpenDir):
+            self.importDirImages(self.lastOpenDir)
+
 def inverted(color):
     return QColor(*[255 - v for v in color.getRgb()])
 
@@ -1594,6 +1600,7 @@ def get_main_app(argv=[]):
                      args.predefined_classes_file,
                      args.save_dir)
     win.show()
+    win.shown()
     return app, win
 
 

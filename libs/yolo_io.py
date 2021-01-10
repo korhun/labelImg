@@ -97,9 +97,10 @@ class YoloReader:
 
         # print (filepath, self.classListPath)
 
-        classesFile = open(self.classListPath, 'r')
-        self.classes = classesFile.read().strip('\n').split('\n')
-
+        if os.path.isfile(self.classListPath):
+            classesFile = open(self.classListPath, 'r')
+            self.classes = classesFile.read().strip('\n').split('\n')
+        self.classes = None
         # print (self.classes)
 
         imgSize = [image.height(), image.width(),
@@ -122,7 +123,10 @@ class YoloReader:
         self.shapes.append((label, points, None, None, difficult))
 
     def yoloLine2Shape(self, classIndex, xcen, ycen, w, h):
-        label = self.classes[int(classIndex)]
+        try:
+            label = self.classes[int(classIndex)]
+        except:
+            label = classIndex
 
         xmin = max(float(xcen) - float(w) / 2, 0)
         xmax = min(float(xcen) + float(w) / 2, 1)
