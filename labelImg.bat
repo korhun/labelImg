@@ -1,1 +1,1 @@
-.\venv\Scripts\python.exe labelImg.py
+python labelImg.py
